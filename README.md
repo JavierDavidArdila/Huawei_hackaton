@@ -13,7 +13,7 @@ Con el objetivo de mantener el repositorio organizado y facilitar el proceso de 
 # Fecha límite de entrega
 
 > **IMPORTANTE**  
-> Las soluciones podrán enviarse únicamente hasta las **DEFINIR HORA LIMITE**.  
+> Las soluciones podrán enviarse únicamente hasta las **11am**.  
 > Después de esa hora, **no se permitirán más commits, pushes ni Pull Requests al repositorio**.
 
 Se recomienda realizar la entrega con anticipación para evitar inconvenientes técnicos de última hora.
