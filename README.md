@@ -38,7 +38,7 @@ Antes de realizar cualquier modificación, crea una rama independiente utilizand
 ### Ejemplo
 
 ```text
-Juan Rodríguez Grupo 1 → juan-rodriguez-G1
+Juan Rodríguez Grupo 1 → juan-rodriguez-g1
 ```
 
 ### Crear la rama
