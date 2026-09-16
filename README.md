@@ -1,6 +1,6 @@
 # maas-hackathon-260526
 
-Repositorio oficial para recopilar las soluciones y retos desarrollados por los participantes del Hackatón Huawei Colombia MaaS — niveles avanzado e intermedio — realizado el 26 de mayo de 2026.
+Repositorio oficial para recopilar las soluciones y retos desarrollados por los participantes del Hackatón Huawei Colombia MaaS
 
 ---
 
@@ -13,7 +13,7 @@ Con el objetivo de mantener el repositorio organizado y facilitar el proceso de 
 # Fecha límite de entrega
 
 > **IMPORTANTE**  
-> Las soluciones podrán enviarse únicamente hasta las **11:20 AM del día 26 de mayo de 2026**.  
+> Las soluciones podrán enviarse únicamente hasta las **DEFINIR HORA LIMITE**.  
 > Después de esa hora, **no se permitirán más commits, pushes ni Pull Requests al repositorio**.
 
 Se recomienda realizar la entrega con anticipación para evitar inconvenientes técnicos de última hora.
@@ -25,26 +25,26 @@ Se recomienda realizar la entrega con anticipación para evitar inconvenientes t
 Clona el repositorio oficial en tu máquina local:
 
 ```bash
-git clone https://github.com/huawei-cloud-colombia/maas-hackathon-260526.git
-cd maas-hackathon-260526
+git clone https://github.com/huawei-cloud-colombia/Huawei_hackaton.git
+cd Huawei_hackaton
 ```
 
 ---
 
 ## 2. Crear una rama propia
 
-Antes de realizar cualquier modificación, crea una rama independiente utilizando tu primer nombre y primer apellido en minúsculas, separados por un guion (`-`) y sin caracteres especiales (sin tildes ni `ñ`).
+Antes de realizar cualquier modificación, crea una rama independiente utilizando tu primer nombre, primer apellido en minúsculas y G-numero de grupo, separados por un guion (`-`) y sin caracteres especiales (sin tildes ni `ñ`).
 
 ### Ejemplo
 
 ```text
-Juan Rodríguez → juan-rodriguez
+Juan Rodríguez Grupo 1 → juan-rodriguez-G1
 ```
 
 ### Crear la rama
 
 ```bash
-git checkout -b tu-nombre-apellido
+git checkout -b tu-nombre-apellido-g#grupo
 ```
 
 ---
@@ -56,11 +56,10 @@ Dentro de tu rama, debes crear una carpeta en la raíz del repositorio utilizand
 La estructura del proyecto debe verse de la siguiente manera:
 
 ```text
-📂 tu-nombre-apellido/
+📂 tu-nombre-apellido-g#grupo/
 ├── 📄 README.md              # Instrucciones claras para ejecutar el proyecto
 ├── 📄 requerimientos.txt     # Dependencias y librerías necesarias
 ├── 📄 prompt_usado.txt       # Prompts utilizados en Huawei MaaS
-├── 📄 reporte_becas.txt      # Reporte con las 3 becas más afines por estudiante
 └── 📂 codigo/                # Código fuente del desarrollo
 ```
 
@@ -73,7 +72,6 @@ La estructura del proyecto debe verse de la siguiente manera:
 | `README.md` | Explica claramente cómo instalar, configurar y ejecutar el proyecto. |
 | `requerimientos.txt` | Lista de dependencias necesarias para ejecutar la solución. |
 | `prompt_usado.txt` | Debe incluir los prompts utilizados durante el desarrollo en Huawei MaaS. |
-| `reporte_becas.txt` | Reporte con las 3 becas más afines para cada estudiante. También puede entregarse en formato `.docx` o `.pptx`. |
 | `codigo/` | Carpeta que contiene el código fuente completo del proyecto. |
 
 ---
@@ -83,28 +81,10 @@ La estructura del proyecto debe verse de la siguiente manera:
 Una vez tengas lista tu estructura y archivos, guarda los cambios, crea un commit y sube únicamente tu rama al repositorio remoto.
 
 ```bash
-git add tu-nombre-apellido/
-git commit -m "feat: entrega de reto de Tu Nombre"
-git push origin tu-nombre-apellido
+git add tu-nombre-apellido-g#grupo/
+git commit -m "feat: entrega de reto X de Tu Nombre"
+git push origin tu-nombre-apellido-g#grupo
 ```
-
----
-
-## 5. Crear el Pull Request
-
-Después de subir tu rama, debes crear un **Pull Request (PR)** hacia la rama principal del repositorio.
-
-> **IMPORTANTE:**  
-> La entrega únicamente será considerada válida si el Pull Request fue creado correctamente antes de la hora límite establecida.
-
-### Pasos para crear el Pull Request
-
-1. Ingresa al repositorio en GitHub.
-2. Dirígete a la pestaña **Pull Requests**.
-3. Haz clic en **New Pull Request**.
-4. Selecciona tu rama como origen.
-5. Verifica que el destino sea la rama principal (`main`).
-6. Crea el Pull Request con tu nombre completo.
 
 ---
 
@@ -121,16 +101,6 @@ Está estrictamente prohibido subir:
 - Información sensible o confidencial
 
 Asegúrate de incluir estos archivos y directorios en tu `.gitignore`.
-
----
-
-## Formato del reporte
-
-El reporte de las 3 becas más afines puede entregarse en cualquiera de los siguientes formatos:
-
-- `.txt`
-- `.docx`
-- `.pptx`
 
 ---
 
@@ -162,27 +132,26 @@ __pycache__/
 
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/huawei-cloud-colombia/maas-hackathon-260526.git
+git clone https://github.com/huawei-cloud-colombia/Huawei_hackaton.git
 
 # 2. Entrar al proyecto
-cd maas-hackathon-260526
+cd Huawei_hackaton
 
 # 3. Crear rama personal
-git checkout -b tu-nombre-apellido
+git checkout -b tu-nombre-apellido-g#grupo
 
 # 4. Crear estructura del proyecto
 # (Agregar carpeta y archivos requeridos)
 
 # 5. Guardar cambios
-git add tu-nombre-apellido/
+git add tu-nombre-apellido-g#/
 
 # 6. Crear commit
-git commit -m "feat: entrega de reto de Tu Nombre"
+git commit -m "feat: entrega de reto de Tu Nombre y grupo"
 
 # 7. Subir rama
-git push origin tu-nombre-apellido
+git push origin tu-nombre-apellido-g#
 
-# 8. Crear Pull Request en GitHub
 ```
 
 ---
