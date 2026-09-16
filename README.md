@@ -1,4 +1,4 @@
-# maas-hackathon-260526
+# maas-hackathon
 
 Repositorio oficial para recopilar las soluciones y retos desarrollados por los participantes del Hackatón Huawei Colombia MaaS
 
