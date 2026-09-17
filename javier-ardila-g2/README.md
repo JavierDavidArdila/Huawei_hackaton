@@ -29,6 +29,27 @@ Motor de asignación en tiempo real para QuickBite, una app de domicilios. Decid
 └─────────────────────────────────────────────────────┘
 ```
 
+### Decisiones de diseño - Javier Ardila
+
+> **Nota para el jurado:** El enunciado del Reto 2 pide construir "un servicio
+> (API o CLI)", simular una llamada a un servicio externo de pricing, y construir
+> una interfaz gráfica. Todo esto podría haberse resuelto en un solo proceso.
+>
+> **Decidí desacoplar en 3 contenedores separados como diferenciador
+> arquitectónico**, no como requisito del enunciado. Las razones:
+>
+> 1. **Realismo del circuit breaker (Fase 3):** El pricing-service como
+>    contenedor separado simula fielmente un servicio externo que se cae,
+>    haciendo que el circuit breaker sea auténtico y no un mock embebido.
+> 2. **Escalabilidad independiente:** Cada servicio puede escalar
+>    horizontalmente por separado (más instancias del engine, más replicas
+>    del pricing, CDN para el frontend).
+> 3. **Separación de responsabilidades:** El engine no conoce la
+>    implementación del pricing, solo su contrato HTTP. Cumple el principio
+>    de inversión de dependencias.
+> 4. **Despliegue realista:** Refleja cómo se desplegaría en producción
+>    (Kubernetes, ECS, etc.), no solo un demo de hackathon.
+
 | Contenedor | Puerto | Responsabilidad |
 |---|---|---|
 | assignment-engine | 8000 | Lógica de asignación (Fases 1-3), estado thread-safe, API REST, circuit breaker |
