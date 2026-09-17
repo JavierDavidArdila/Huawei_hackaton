@@ -9,90 +9,217 @@
 <body>
     <div class="container">
         <header>
-            <h1>FlowMatch Assignment Engine</h1>
-            <p class="subtitle">QuickBite - Motor de asignacion en tiempo real</p>
+            <div class="header-left">
+                <h1>FlowMatch Assignment Engine</h1>
+                <p class="subtitle">QuickBite - Motor de asignacion en tiempo real</p>
+            </div>
+            <div class="header-right" id="header-status">
+                <span class="badge badge-sm" id="hd-cb">CB: --</span>
+                <span class="badge badge-sm" id="hd-queue">Cola: 0</span>
+                <span class="badge badge-sm" id="hd-containment">Contencion: OK</span>
+                <button id="hd-reset" class="btn btn-small btn-danger">Reset</button>
+            </div>
         </header>
 
-        <div class="grid">
-            <section class="card form-section">
-                <h2>Nuevo Pedido</h2>
-                <form id="order-form">
-                    <div class="form-group">
-                        <label for="order_id">Order ID</label>
-                        <input type="text" id="order_id" value="ord_00234" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="pickup_zone">Zona de Recogida</label>
-                        <select id="pickup_zone">
-                            <option value="centro">centro</option>
-                            <option value="norte">norte</option>
-                            <option value="sur">sur</option>
-                            <option value="occidente">occidente</option>
-                            <option value="oriente">oriente</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="distance_km">Distancia (km)</label>
-                        <input type="number" id="distance_km" value="3.2" step="0.1" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="priority">Prioridad</label>
-                        <select id="priority">
-                            <option value="normal">normal</option>
-                            <option value="express">express</option>
-                        </select>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Asignar</button>
-                        <button type="button" id="burst-btn" class="btn btn-warning">Simular Rafaga (6x)</button>
-                        <button type="button" id="reset-btn" class="btn btn-secondary">Reset</button>
-                    </div>
-                </form>
-            </section>
+        <nav class="tabs">
+            <button class="tab active" data-tab="assign">Asignar</button>
+            <button class="tab" data-tab="couriers">Repartidores</button>
+            <button class="tab" data-tab="batch">Lotes</button>
+            <button class="tab" data-tab="explanations">Explicaciones</button>
+            <button class="tab" data-tab="config">Configuracion</button>
+            <button class="tab" data-tab="status">Estado</button>
+        </nav>
 
-            <section class="card couriers-section">
-                <h2>Repartidores</h2>
-                <table id="couriers-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Zona</th>
-                            <th>Activos</th>
-                            <th>Max</th>
-                            <th>Util.</th>
-                        </tr>
-                    </thead>
-                    <tbody id="couriers-body">
-                    </tbody>
-                </table>
-                <div class="courier-controls">
-                    <button id="add-courier-btn" class="btn btn-small">+ Repartidor</button>
+        <div class="tab-content active" id="tab-assign">
+            <div class="grid">
+                <section class="card">
+                    <h2>Nuevo Pedido</h2>
+                    <form id="order-form">
+                        <div class="form-group">
+                            <label for="order_id">Order ID</label>
+                            <input type="text" id="order_id" value="ord_00234" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pickup_zone">Zona de Recogida</label>
+                            <select id="pickup_zone">
+                                <option value="centro">centro</option>
+                                <option value="norte">norte</option>
+                                <option value="sur">sur</option>
+                                <option value="occidente">occidente</option>
+                                <option value="oriente">oriente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="distance_km">Distancia (km)</label>
+                            <input type="number" id="distance_km" value="3.2" step="0.1" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Prioridad</label>
+                            <select id="priority">
+                                <option value="normal">normal</option>
+                                <option value="express">express</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Asignar</button>
+                            <button type="button" id="burst-btn" class="btn btn-warning">Simular Rafaga (6x)</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="card">
+                    <h2>Repartidores</h2>
+                    <table class="couriers-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Zona</th><th>Activos</th><th>Max</th><th>Util.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="couriers-body"></tbody>
+                    </table>
+                    <div class="courier-controls">
+                        <button id="add-courier-btn" class="btn btn-small">+ Repartidor</button>
+                    </div>
+                </section>
+            </div>
+
+            <section class="card">
+                <h2>Resultados</h2>
+                <div id="results-container">
+                    <p class="placeholder">Los resultados aparecen aqui...</p>
                 </div>
             </section>
         </div>
 
-        <section class="card results-section">
-            <h2>Resultados</h2>
-            <div id="results-container">
-                <p class="placeholder">Los resultados aparecen aqui...</p>
-            </div>
-        </section>
+        <div class="tab-content" id="tab-couriers">
+            <section class="card">
+                <h2>Gestion de Repartidores</h2>
+                <div class="form-actions">
+                    <button id="couriers-refresh" class="btn btn-secondary">Actualizar</button>
+                    <button id="couriers-reset" class="btn btn-danger">Resetear Estado</button>
+                    <button id="add-courier-btn2" class="btn btn-small">+ Repartidor</button>
+                </div>
+                <table class="couriers-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Zona</th><th>Activos</th><th>Max</th><th>Util.</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="couriers-body2"></tbody>
+                </table>
+            </section>
+            <section class="card">
+                <h2>Inicializar Repartidores (JSON)</h2>
+                <p class="hint">Pega un JSON array de couriers para inicializar el estado:</p>
+                <textarea id="init-couriers-json" rows="8" placeholder='[{"courier_id":"cour_A","zone":"centro","active_orders":0,"max_capacity":3}]'></textarea>
+                <button id="init-couriers-btn" class="btn btn-primary">Inicializar</button>
+                <div id="init-result"></div>
+            </section>
+        </div>
 
-        <section class="card config-section">
-            <h2>Configuracion de Reglas</h2>
-            <div id="config-container">
-                <p class="placeholder">Cargando configuracion...</p>
-            </div>
-        </section>
+        <div class="tab-content" id="tab-batch">
+            <section class="card">
+                <h2>Asignacion por Lotes (Bono A - Algoritmo Hungaro)</h2>
+                <p class="hint">Genera N pedidos y asignalos de forma optima (emparejamiento global) vs greedy (uno a uno).</p>
+                <div class="form-group">
+                    <label for="batch-count">Numero de pedidos</label>
+                    <input type="number" id="batch-count" value="5" min="1" max="20">
+                </div>
+                <div class="form-group">
+                    <label for="batch-zone">Zona</label>
+                    <select id="batch-zone">
+                        <option value="centro">centro</option>
+                        <option value="norte">norte</option>
+                        <option value="sur">sur</option>
+                        <option value="occidente">occidente</option>
+                        <option value="oriente">oriente</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button id="batch-assign-btn" class="btn btn-primary">Asignar Lote (Optimo)</button>
+                    <button id="batch-compare-btn" class="btn btn-warning">Comparar Greedy vs Optimo</button>
+                </div>
+            </section>
+            <section class="card">
+                <h2>Resultado del Lote</h2>
+                <div id="batch-result">
+                    <p class="placeholder">Ejecuta una asignacion por lotes...</p>
+                </div>
+            </section>
+            <section class="card">
+                <h2>Comparacion de Estrategias</h2>
+                <div id="batch-compare-result">
+                    <p class="placeholder">Ejecuta una comparacion...</p>
+                </div>
+            </section>
+        </div>
 
-        <section class="card status-section">
-            <h2>Estado del Sistema</h2>
-            <div id="status-container">
-                <p class="placeholder">Cargando...</p>
+        <div class="tab-content" id="tab-explanations">
+            <section class="card">
+                <h2>Pedidos Rechazados (Bono C)</h2>
+                <div class="form-actions">
+                    <button id="load-rejected-btn" class="btn btn-primary">Cargar Rechazos</button>
+                </div>
+                <div id="rejected-list">
+                    <p class="placeholder">No hay rechazos cargados...</p>
+                </div>
+            </section>
+            <section class="card">
+                <h2>Buscar Explicacion por Order ID</h2>
+                <div class="form-group">
+                    <label for="explain-order-id">Order ID</label>
+                    <input type="text" id="explain-order-id" placeholder="ord_00234">
+                    <button id="explain-search-btn" class="btn btn-primary">Buscar</button>
+                </div>
+                <div id="explain-detail">
+                    <p class="placeholder">Busca un order_id para ver su explicacion...</p>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="tab-config">
+            <section class="card">
+                <h2>Reglas de Asignacion (Fase 1)</h2>
+                <div id="config-rules"></div>
+            </section>
+            <section class="card">
+                <h2>Parametros de Rafagas (Fase 2)</h2>
+                <div id="config-burst"></div>
+            </section>
+            <section class="card">
+                <h2>Circuit Breaker y Pricing (Fase 3)</h2>
+                <div id="config-resilience"></div>
+            </section>
+            <div class="form-actions">
+                <button id="config-save-btn" class="btn btn-primary">Guardar Configuracion</button>
+                <button id="config-reload-btn" class="btn btn-secondary">Recargar</button>
             </div>
-        </section>
+        </div>
+
+        <div class="tab-content" id="tab-status">
+            <section class="card">
+                <h2>Estado del Sistema</h2>
+                <div class="form-actions">
+                    <button id="status-refresh" class="btn btn-secondary">Actualizar</button>
+                </div>
+                <div id="status-full">
+                    <p class="placeholder">Cargando...</p>
+                </div>
+            </section>
+            <section class="card">
+                <h2>Cola de Espera</h2>
+                <div id="queue-status">
+                    <p class="placeholder">Cargando...</p>
+                </div>
+            </section>
+            <section class="card">
+                <h2>Circuit Breaker</h2>
+                <div id="cb-status">
+                    <p class="placeholder">Cargando...</p>
+                </div>
+            </section>
+        </div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
