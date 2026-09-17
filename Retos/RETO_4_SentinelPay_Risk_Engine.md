@@ -189,5 +189,3 @@ Escriban un set de **pruebas automatizadas** que simule específicamente patrone
 | **Bonos** | Bono A (grafo) + Bono B (concurrencia) + Bono C (auditoría) + Bono D (pruebas adversariales) | hasta **+30** |
 
 > **Nota de calificación:** cada criterio se puntúa como fracción de su máximo (0%, 50% o 100% de cumplimiento) para mantener la evaluación objetiva y rápida — no hay que inventar escalas distintas por fila.
-
-**Puntaje final** = subtotal base (máx. 100) + bonos (máx. 30) → escala final sobre **130**, normalizable a 100 si se requiere comparar contra otras hackathons del evento.
