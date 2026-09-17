@@ -1,0 +1,114 @@
+# Bitácora de Prompts - FlowMatch Assignment Engine
+# Reto 2 - Hackatón Huawei Colombia MaaS
+# Equipo: Javier Ardila - Grupo 2
+# Modelo: GLM 5.2
+
+## Prompt 1 - Planeación y arquitectura
+**Prompt:**
+"El nuevo reto tiene estas instrucciones https://github.com/huawei-cloud-colombia/Huawei_hackaton, y a nosotros nos toco el Reto 2. Lee muy atento todas las instrucciones, ubica el 2 y dime qué tenemos que hacer."
+
+**Iteración:**
+- GLM 5.2 leyó el repositorio completo, identificó el Reto 2 (FlowMatch Assignment Engine) y extrajo todas las instrucciones detalladas.
+- Resumió las 4 fases, los 4 bonos, los entregables y la rúbrica de evaluación.
+
+## Prompt 2 - Definición de arquitectura
+**Prompt:**
+"Javier Ardila - Grupo 2, y sí pensemos en la arquitectura, se me ocurre desacoplar y en contenedores que permitan escalar"
+
+**Iteración:**
+- GLM 5.2 propuso arquitectura de 3 contenedores desacoplados: assignment-engine (FastAPI), pricing-service (mock), frontend (nginx).
+- Definió estructura interna modular con separación de responsabilidades: engine/, resilience/, state/, explainability/.
+- Preguntó al usuario sobre stack, bonos y frontend. Usuario eligió: Python+FastAPI, HTML/JS vanilla, los 4 bonos.
+
+## Prompt 3 - Corrección de bug de estado
+**Prompt (interno durante testing):**
+"Los tests de concurrencia fallan: se asignan 3 pedidos a un courier con max_capacity=2. El endpoint re-inicializa los couriers en cada request, reseteando active_orders a 0."
+
+**Iteración:**
+- GLM 5.2 identificó que el endpoint `/assign` llamaba `courier_state.init_couriers()` en cada request, reseteando el estado.
+- Corrección: solo inicializar couriers si el estado está vacío (primer request). Requests subsecuentes usan el estado persistente del servidor.
+- Resultado: 29/29 tests pasan, incluyendo los de concurrencia (Bono B).
+
+## Prompt 4 - Implementación de Fase 1 (Asignación base)
+**Prompt (interno):**
+"Implementa la Fase 1: 3 reglas configurables (same_zone_preferred, capacity_check, least_loaded). El assigner debe filtrar por zona, luego por capacidad, luego ordenar por menor carga. Cada regla debe poder activarse/desactivarse via config."
+
+**Iteración:**
+- GLM 5.2 creó models.py con Pydantic (Order, Courier, AssignmentResult, Reason).
+- config.py con RuleConfig (todas las reglas activables).
+- assigner.py con la lógica de 3 reglas + fallback a otras zonas.
+- Tests: 7 tests validando asignación correcta, skip de couriers llenos, queue cuando todos llenos.
+
+## Prompt 5 - Implementación de Fase 2 (Control de ráfagas)
+**Prompt (interno):**
+"Implementa la Fase 2: sliding window rate limiter por courier, balanceo de zona, y modo de contención temporal (3 pedidos consecutivos con todos llenos + cola creciendo → REJECTED por 120s con auto-expiración)."
+
+**Iteración:**
+- GLM 5.2 creó rate_limiter.py con SlidingWindowRateLimiter (deque de timestamps, remueve viejos).
+- burst_control.py con check_contention (rechaza normal durante contención, express sigue) y evaluate_saturation (activa contención tras 3 consecutivos).
+- wait_queue.py con gestión de cola, contador de saturación, y contención con auto-expiración.
+- Tests: 5 tests validando rate limit, contención, auto-expiración.
+
+## Prompt 6 - Implementación de Fase 3 (Circuit breaker + optimización)
+**Prompt (interno):**
+"Implementa la Fase 3: servicio externo de pricing con 30% de fallo, circuit breaker (3 fallos → open 15s → half-open → retry), y optimización de costo entre couriers válidos."
+
+**Iteración:**
+- GLM 5.2 creó circuit_breaker.py con estados CLOSED/OPEN/HALF_OPEN y transiciones automáticas.
+- pricing_client.py que envuelve la llamada HTTP con el circuit breaker y usa tarifa base fija cuando está abierto.
+- pricing-service/app/main.py con endpoint /price que falla 30% (timeout o error 500).
+- optimizer.py que minimiza costo y enriquece el resultado con cost y pricing_status.
+- Tests: 6 tests validando todos los estados del circuit breaker y degradación segura.
+
+## Prompt 7 - Implementación de Fase 4 (Frontend)
+**Prompt (interno):**
+"Implementa la Fase 4: interfaz HTML/JS vanilla con formulario de pedido, tabla de couriers editable, resultados con colores (verde/amarillo/rojo), botón de ráfaga 6x, panel de configuración y estado del sistema."
+
+**Iteración:**
+- GLM 5.2 creó index.html con formulario, tabla de couriers, secciones de resultados, config y estado.
+- style.css con diseño responsive, colores semánticos para ASSIGNED/QUEUED/REJECTED.
+- app.js con fetch al API, renderizado de resultados, simulación de ráfaga, edición de couriers, toggle de config.
+- nginx.conf para servir estáticos y proxy al backend.
+
+## Prompt 8 - Bono A (Optimización por lotes)
+**Prompt (interno):**
+"Implementa el Bono A: optimización global por lotes usando algoritmo húngaro (scipy.optimize.linear_sum_assignment). Crea una matriz de costo (distancia × tarifa + penalización de zona + penalización de carga) y resuelve el emparejamiento óptimo."
+
+**Iteración:**
+- GLM 5.2 creó batch_optimizer.py con assign_batch_optimal (húngaro) y assign_batch_greedy (secuencial).
+- Endpoint POST /assign-batch para asignación óptima y POST /assign-batch/compare para comparar estrategias.
+- La matriz de costo incluye: costo de distancia, penalización por zona diferente, penalización por carga actual.
+
+## Prompt 9 - Bono B (Concurrencia segura)
+**Prompt (interno):**
+"Implementa el Bono B: demuestra con pruebas de carga reales que el estado compartido es seguro ante requests concurrentes. Usa asyncio.Lock en courier_state, wait_queue y rate_limiter."
+
+**Iteración:**
+- GLM 5.2 ya tenía asyncio.Lock en todas las clases de estado.
+- Creó test_concurrency.py con 3 pruebas usando asyncio.gather para lanzar requests simultáneos.
+- Verifica que active_orders nunca excede max_capacity, incluso con 10-20 requests concurrentes.
+
+## Prompt 10 - Bono C (Explicabilidad exportable)
+**Prompt (interno):**
+"Implementa el Bono C: para cada REJECTED, genera un reporte JSON con reglas activadas, estado de couriers, timestamp y explicación en lenguaje natural."
+
+**Iteración:**
+- GLM 5.2 creó reporter.py con generate_report (JSON estructurado) y _generate_nl_explanation (texto natural).
+- La explicación natural incluye: motivo del rechazo, couriers saturados, estado de contención, tamaño de cola, recomendación.
+- Endpoints GET /explanation/{order_id} y GET /explanations/rejected.
+
+## Prompt 11 - Bono D (Escenarios extremos)
+**Prompt (interno):**
+"Implementa el Bono D: suite de pruebas para escenarios críticos: ráfaga a una zona, todos llenos, avalancha express, distancia negativa, prioridad inválida, sin couriers, nunca excede capacidad, expiración de contención."
+
+**Iteración:**
+- GLM 5.2 creó test_extreme.py con 8 pruebas.
+- Valida: 422 para distancia negativa y prioridad inválida, 400 sin couriers, nunca sobre-asigna, contención expira correctamente.
+- Todas las pruebas pasan, confirmando la robustez del sistema.
+
+## Resumen de iteración con GLM 5.2
+- Total de prompts: 11 (3 de planeación + 4 de fases + 4 de bonos)
+- El modelo fue usado como copiloto de desarrollo, no como generador ciego de código.
+- Cada fase fue iterada: código → tests → corrección → verificación.
+- Bug crítico encontrado y corregido: re-inicialización de estado en cada request.
+- 29/29 tests pasan al final.

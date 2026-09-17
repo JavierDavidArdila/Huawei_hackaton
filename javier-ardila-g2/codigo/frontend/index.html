@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowMatch Assignment Engine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FlowMatch Assignment Engine</h1>
+            <p class="subtitle">QuickBite - Motor de asignacion en tiempo real</p>
+        </header>
+
+        <div class="grid">
+            <section class="card form-section">
+                <h2>Nuevo Pedido</h2>
+                <form id="order-form">
+                    <div class="form-group">
+                        <label for="order_id">Order ID</label>
+                        <input type="text" id="order_id" value="ord_00234" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup_zone">Zona de Recogida</label>
+                        <select id="pickup_zone">
+                            <option value="centro">centro</option>
+                            <option value="norte">norte</option>
+                            <option value="sur">sur</option>
+                            <option value="occidente">occidente</option>
+                            <option value="oriente">oriente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance_km">Distancia (km)</label>
+                        <input type="number" id="distance_km" value="3.2" step="0.1" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Prioridad</label>
+                        <select id="priority">
+                            <option value="normal">normal</option>
+                            <option value="express">express</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Asignar</button>
+                        <button type="button" id="burst-btn" class="btn btn-warning">Simular Rafaga (6x)</button>
+                        <button type="button" id="reset-btn" class="btn btn-secondary">Reset</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="card couriers-section">
+                <h2>Repartidores</h2>
+                <table id="couriers-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Zona</th>
+                            <th>Activos</th>
+                            <th>Max</th>
+                            <th>Util.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="couriers-body">
+                    </tbody>
+                </table>
+                <div class="courier-controls">
+                    <button id="add-courier-btn" class="btn btn-small">+ Repartidor</button>
+                </div>
+            </section>
+        </div>
+
+        <section class="card results-section">
+            <h2>Resultados</h2>
+            <div id="results-container">
+                <p class="placeholder">Los resultados aparecen aqui...</p>
+            </div>
+        </section>
+
+        <section class="card config-section">
+            <h2>Configuracion de Reglas</h2>
+            <div id="config-container">
+                <p class="placeholder">Cargando configuracion...</p>
+            </div>
+        </section>
+
+        <section class="card status-section">
+            <h2>Estado del Sistema</h2>
+            <div id="status-container">
+                <p class="placeholder">Cargando...</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

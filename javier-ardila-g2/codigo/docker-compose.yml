@@ -1,0 +1,24 @@
+services:
+  assignment-engine:
+    build: ./assignment-engine
+    ports:
+      - "8000:8000"
+    environment:
+      - PRICING_SERVICE_URL=http://pricing-service:8001
+    depends_on:
+      - pricing-service
+    restart: unless-stopped
+
+  pricing-service:
+    build: ./pricing-service
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - assignment-engine
+    restart: unless-stopped

@@ -1,0 +1,24 @@
+# Dependencias del proyecto FlowMatch Assignment Engine
+
+# Assignment Engine (Python 3.11+)
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+httpx==0.27.2
+numpy==2.1.1
+scipy==1.14.1
+
+# Testing
+pytest==8.3.3
+pytest-asyncio==0.24.0
+
+# Pricing Service (no requiere dependencias adicionales)
+# Hereda de las anteriores
+
+# Frontend
+# No requiere dependencias de Python
+# Servido por nginx en Docker
+
+# Docker
+# Docker Engine 24+
+# Docker Compose v2+
